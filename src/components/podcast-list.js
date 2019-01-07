@@ -60,8 +60,10 @@ const PodcastList = {
     },   
 
     _renderPodcastList(podcastList) {
-        const element = document.querySelector('.podcasts-list'); // TODO: Revisar esto!!!
-        render(this._getPodcastsHtml(podcastList.podcasts), element);
+        const listElement = document.querySelector('.podcasts-list'), // TODO: Revisar esto!!!
+            badgeElement = document.querySelector('.badge');
+        render(this._getPodcastsHtml(podcastList.podcasts), listElement);
+        badgeElement.innerHTML = podcastList.podcasts.length;
     },
 
     _filterPodcasts(valuesFilter) {        

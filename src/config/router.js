@@ -28,18 +28,27 @@ const Router = {
     changeUrl(url) {
 
         const patternPodcast = new RegExp(/^\/podcast\/(\d*)\/?$/),
+            paramPodcast = url.match(patternPodcast),            
             patternEpisode = new RegExp(/^\/podcast\/(\d*)\/episode\/(.*)\/?$/),
+            paramEpisode = url.match(patternEpisode),
             element = document.querySelector('.main-content'); // TODO: Revisar esto!!!
-        let component;
+        let params, component;
 
-        if (url.match(patternPodcast)) {
+        if (paramPodcast) {            
             component = Podcast;
-        } else if (url.match(patternEpisode)) {
+            params = {
+                podcastId: paramPodcast[1]
+            };
+        } else if (paramEpisode) {
             component = Episode;
+            params = {
+                podcastId: paramPodcast[1],
+                epidoseId: paramEpisode[2]
+            }
         } else {
             component = PodcastList;
         }
-        component.init().then((context) => {
+        component.init(params).then((context) => {
             render(component.getHtml(context), element);
             if (component.initEvents){
                 component.initEvents();
