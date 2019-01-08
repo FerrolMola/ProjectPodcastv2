@@ -39,7 +39,6 @@ export function getAllPodcasts() {
 export function getPodcastFeedUrl(podcastId) {
 	return new Promise((resolve, reject) => {
 
-		// TODO: Revisar si response es vacio que pasa!!!
 		fetch(CORS_PROXY + TOPPODCASTS_EPISODE_URL + podcastId)
 			.then(response => {
 				return response.json();
@@ -82,8 +81,8 @@ function _parseEpisodes(podcastDocument) {
 function _parsePodcast(podcast) {
 
 	return {
-		id: podcast.podcastId,
-		titulo: podcast.name,
+		id: podcast.id,
+		name: podcast.name,
 		author: podcast.author,
 		description: podcast.description,
 		img: podcast.img,		
@@ -125,9 +124,25 @@ export function getPodcast(id){
 					save('podcast_' + id, podcast, ONE_DAY);
 					resolve(podcast);
 				})
-				.catch(error => reject(error) );
-			
+				.catch(error => reject(error) );			
 		}
+	});
+}
+
+export function getPodcastEpisode(podcastId, episodeId){
+	return new Promise ((resolve, reject) => {
+
+		getPodcast(podcastId)
+		.then(podcast => {                    
+			const episodeFind = podcast.episodes.find(episode => {
+				return episode.id === episodeId;
+			});
+			resolve({
+				...podcast,
+				episodes: episodeFind
+			});
+		})
+		.catch(error => reject(error));
 	});
 }
 

@@ -36,7 +36,7 @@ a:hover {
 	/* margin-bottom: 30px;
 	padding-bottom: 10px; */
 	border-bottom: 1px solid #e5e5e5;
-	position: fixed;
+	position: relative;
 	width: 85%;
 	left: 0;
 	right: 0;
@@ -283,15 +283,12 @@ a:hover {
 .episode-detail .player audio {
 	width: 100%;
 }
-.episode-detail-page.page-with-sidebar {
-	display: none;
-}
 
 /* START: Spinner (http://tobiasahlin.com/spinkit/) */
 .spinner {
   width: 40px;
   height: 40px;
-
+  top: 0;
   position: absolute;
   right: 5px;
   /*margin: 100px auto;*/
