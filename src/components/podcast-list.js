@@ -1,22 +1,12 @@
 import { getAllPodcasts } from '../api/api.js';
-import { render } from '../helper/helper.js';
+import { render } from '../helpers/render.js';
 
 const PodcastList = {
 
     inputFilter: null,
 
     init() {                  
-        let self = this;
-        const promise = new Promise((resolve, reject) => {
-            getAllPodcasts()
-                .then(allPodcasts => {
-                    self.podcastList = allPodcasts;
-                    resolve({ podcasts: allPodcasts});
-                })
-                .catch(error => reject(error));
-        });
-
-        return promise;
+        return getAllPodcasts();
     },
 
     _getPodcastsHtml(podcastList) {
@@ -48,20 +38,21 @@ const PodcastList = {
         return `
             <div class="podcasts-grid">
                 <div class="filter">
-                    <span class="badge">${podcastList.podcasts.length}</span>
+                    <span class="badge">${podcastList.length}</span>
                     <input type="text" name="filter-value" autoFocus
                         placeholder="Filter podcasts..." value="">
                 </div>
                 <div class="podcasts-list">
-                    ${this._getPodcastsHtml(podcastList.podcasts)}
+                    ${this._getPodcastsHtml(podcastList)}
                 </div>
             </div>
         `;        
     },   
 
     _renderPodcastList(podcastList) {
-        const listElement = document.querySelector('.podcasts-list'), // TODO: Revisar esto!!!
+        const listElement = document.querySelector('.podcasts-list'),
             badgeElement = document.querySelector('.badge');
+
         render(this._getPodcastsHtml(podcastList.podcasts), listElement);
         badgeElement.innerHTML = podcastList.podcasts.length;
     },
@@ -71,6 +62,7 @@ const PodcastList = {
             const regex = new RegExp(valuesFilter, 'gi');
             return podcast.name.match(regex) || podcast.author.match(regex);
         });
+
         this._renderPodcastList({podcasts: filterList}, valuesFilter);
     },
 

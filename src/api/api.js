@@ -1,4 +1,5 @@
 import { save, load } from '../plugin/cache.js'
+import { parseEpisodes, parsePodcast } from '../helpers/parser.js';
 
 const TOPPODCASTS_URL = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json',
 	TOPPODCASTS_EPISODE_URL = 'https://itunes.apple.com/lookup?id=',
@@ -6,8 +7,7 @@ const TOPPODCASTS_URL = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/g
 	ONE_DAY = 24 * 60 * 60;
 
 export function getAllPodcasts() {
-	return new Promise((resolve, reject) => {		
-
+	return new Promise((resolve, reject) => {
 		const allPodcasts = load('podcasts', ONE_DAY);
 		if (allPodcasts.data) {
 			resolve(allPodcasts.data);
@@ -18,15 +18,8 @@ export function getAllPodcasts() {
 				})
 				.then((data) => {
 					let podcastList = [];
-					data.feed.entry.forEach(function (podcasts) {
-						const podcast = {
-							id: podcasts.id.attributes['im:id'],
-							name: podcasts['im:name'].label,
-							author: podcasts['im:artist'].label,
-							description: podcasts['summary'] ? podcasts['summary'].label : 'Description not available',
-							img: podcasts['im:image'].filter((imageData) => imageData.attributes.height === '170')[0].label
-						}
-						podcastList.push(podcast);
+					data.feed.entry.forEach(podcast => {									
+						podcastList.push(parsePodcast(podcast));
 					});
 					save('podcasts', podcastList, ONE_DAY);
 					resolve(podcastList);
@@ -38,7 +31,6 @@ export function getAllPodcasts() {
 
 export function getPodcastFeedUrl(podcastId) {
 	return new Promise((resolve, reject) => {
-
 		fetch(CORS_PROXY + TOPPODCASTS_EPISODE_URL + podcastId)
 			.then(response => {
 				return response.json();
@@ -50,75 +42,34 @@ export function getPodcastFeedUrl(podcastId) {
 	});
 }
 
-function _parseEpisodes(podcastDocument) {
-	
-	let numEpisode = 0,
-		episodes = [];
-	Array.from(podcastDocument.querySelectorAll('rss channel item'))
-		.map(episode => {
-			const titleEpisode = episode.querySelector('title').textContent,
-				idEpisode = 'episode_' + numEpisode++,
-				fechaPub = new Date(episode.querySelector('pubDate').textContent).toLocaleDateString(),
-				dur = episode.querySelector('duration') ? episode.querySelector('duration').textContent: '-',
-				mp3 = episode.querySelector('enclosure').getAttribute('url'),
-				descripcionEpisode = episode.querySelector('description') ? episode.querySelector('description').textContent: '-';
-
-			episodes.push(
-				{
-					titleEpisode,
-					idEpisode,
-					fechaPub,
-					dur,
-					mp3,
-					descripcionEpisode
-				}
-			)
-	})
-
-	return episodes;
-}
-
-function _parsePodcast(podcast) {
-
-	return {
-		id: podcast.id,
-		name: podcast.name,
-		author: podcast.author,
-		description: podcast.description,
-		img: podcast.img,		
-	};
-}
-
 export function getPodcastEpisodes(podcastId) {
 	return new Promise((resolve, reject) => {
-
 		getPodcastFeedUrl(podcastId).then(feed => {
 			fetch(CORS_PROXY + feed)
 			.then(response => response.text())
 			.then(response => {
 				const data = (new window.DOMParser()).parseFromString(response, "text/xml")				
-				resolve(_parseEpisodes(data));
+				resolve(parseEpisodes(data));
 			})
 			.catch(error => reject(error));
 		})	
 	});
 } 
 
-export function getPodcast(id){
-
+export function getPodcast(id) {
 	return new Promise ((resolve, reject) => {
-
 		const podcast = load('podcast_' + id, ONE_DAY);
+
 		if (podcast.data) {
 			resolve(podcast.data);
-		}else{			
+		} else {			
 			Promise.all([getAllPodcasts(), getPodcastEpisodes(id)])
 				.then(values => {
 					const podcastFind = values[0].find(podcast => {
 						return podcast.id === id;
 					});
 					const podcast = {
-						..._parsePodcast(podcastFind),
+						...podcastFind,
 						episodes: values[1]
 					};
 					save('podcast_' + id, podcast, ONE_DAY);
@@ -131,15 +82,14 @@ export function getPodcast(id){
 
 export function getPodcastEpisode(podcastId, episodeId){
 	return new Promise ((resolve, reject) => {
-
 		getPodcast(podcastId)
 		.then(podcast => {                    
 			const episodeFind = podcast.episodes.find(episode => {
-				return episode.id === episodeId;
+				return episode.id === parseInt(episodeId, 10);
 			});
 			resolve({
 				...podcast,
-				episodes: episodeFind
+				episode: episodeFind
 			});
 		})
 		.catch(error => reject(error));

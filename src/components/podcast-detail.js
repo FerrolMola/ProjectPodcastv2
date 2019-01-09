@@ -4,27 +4,20 @@ import { getPodcast } from '../api/api.js';
 const PodcastDetail = {
 
     init(params) {
-        const promise = new Promise((resolve, reject) => {
-            getPodcast(params.podcastId)
-                .then(podcast => {
-                    resolve(podcast);
-                })
-                .catch(error => reject(error));
-        });
-
-        return promise;
+        return getPodcast(params.podcastId);
     },
 
     _getHtmlEpisodes(podcast){
         const episodesListHtml = [];
+
         podcast.episodes.forEach(episode => {
             const episodeHtml = `
-                <tr class="podcast-episode-summary id="${episode.idEpisode}">
+                <tr class="podcast-episode-summary id="${episode.id}">
                     <td>
-                        <a href="${`/podcast/${podcast.id}/episode/${episode.idEpisode}`}">${episode.titleEpisode}</a>
+                        <a href="${`/podcast/${podcast.id}/episode/${episode.id}`}">${episode.episodeTitle}</a>
                     </td>
-                    <td>${episode.fechaPub}</td>
-                    <td class="duration">${episode.dur}</td>                                       
+                    <td class="date">${episode.pubDate}</td>
+                    <td class="duration">${episode.duration}</td>                                       
                 </tr>`;
             episodesListHtml.push(episodeHtml);
          });

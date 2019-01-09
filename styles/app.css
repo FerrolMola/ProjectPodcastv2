@@ -266,7 +266,11 @@ a:hover {
 }
 
 .podcast-episode-summary .duration {
-	text-align: center;
+	text-align: right;
+}
+
+.podcast-episode-summary .date {
+	text-align: right;
 }
 
 .episode-detail {
