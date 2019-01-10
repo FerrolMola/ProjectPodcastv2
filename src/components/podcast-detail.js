@@ -3,15 +3,15 @@ import { getPodcast } from '../api/api.js';
 
 const PodcastDetail = {
 
-    init(params) {
-        return getPodcast(params.podcastId);
-    },
+	init(params) {
+		return getPodcast(params.podcastId);
+	},
 
-    _getHtmlEpisodes(podcast){
-        const episodesListHtml = [];
+	_getHtmlEpisodes(podcast){
+		const episodesListHtml = [];
 
-        podcast.episodes.forEach(episode => {
-            const episodeHtml = `
+		podcast.episodes.forEach(episode => {
+			const episodeHtml = `
                 <tr class="podcast-episode-summary id="${episode.id}">
                     <td>
                         <a href="${`/podcast/${podcast.id}/episode/${episode.id}`}">${episode.episodeTitle}</a>
@@ -19,14 +19,14 @@ const PodcastDetail = {
                     <td class="date">${episode.pubDate}</td>
                     <td class="duration">${episode.duration}</td>                                       
                 </tr>`;
-            episodesListHtml.push(episodeHtml);
-         });
+			episodesListHtml.push(episodeHtml);
+		});
 
-         return episodesListHtml;
-    },
+		return episodesListHtml;
+	},
 
-    getHtml(podcast){
-        return `
+	getHtml(podcast){
+		return `
             <div class="podcast-detail-page page-with-sidebar">
                 ${Podcast.getHtml(podcast)}
                 <section class="content-section">
@@ -52,7 +52,7 @@ const PodcastDetail = {
                 </section>
             </div>
         `;        
-    }
-}
+	}
+};
 
 export default PodcastDetail;

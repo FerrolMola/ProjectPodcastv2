@@ -1,17 +1,18 @@
 import Router from './config/router.js';
 import configRoutes from './config/config-routes.js';
 
-function loading() {
-    document.querySelector('.spinner').style.display = 'block';
+function hideSpinner() {
+	document.querySelector('.spinner').style.display = 'none';
 }
 
-function loaded() {
-    document.querySelector('.spinner').style.display = 'none';
+function showSpinner() {
+	document.querySelector('.spinner').style.display = 'block';
 }
 
 Router.init({
-    configRoutes,
-    mainElement: document.querySelector('.main-content'),
-    loading,
-    loaded
+	configRoutes,
+	mainElement: document.querySelector('.main-content'),
+	loading: showSpinner,
+	loaded: hideSpinner,
+	error: hideSpinner
 });

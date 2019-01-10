@@ -1,7 +1,7 @@
 const Podcast = {
 
-    getHtml(podcast) {
-        return `<section class="sidebar-section">
+	getHtml(podcast) {
+		return `<section class="sidebar-section">
                     <div class="section sidebar">
                         <div class="podcast-cover text-center">
                             <a href="${`/podcast/${podcast.id}`}">
@@ -22,7 +22,7 @@ const Podcast = {
                         </div>
                     </div>
                 </section>`;
-    },
-}
+	},
+};
 
 export default Podcast;

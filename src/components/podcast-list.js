@@ -3,15 +3,15 @@ import { render } from '../helpers/render.js';
 
 const PodcastList = {
 
-    inputFilter: null,
+	inputFilter: null,
 
-    init() {                  
-        return getAllPodcasts();
-    },
+	init() {
+		return getAllPodcasts();
+	},
 
-    _getPodcastsHtml(podcastList) {
-        return podcastList.map(podcast => {
-            return `
+	_getPodcastsHtml(podcastList) {
+		return podcastList.map(podcast => {
+			return `
                     <div class="podcast-summary">
                         <div class="box">
                             <a href="/podcast/${podcast.id}">
@@ -31,11 +31,11 @@ const PodcastList = {
                         </div>
                     </div>
                 `;
-        })
-    },
+		});
+	},
 
-    getHtml(podcastList) {
-        return `
+	getHtml(podcastList) {
+		return `
             <div class="podcasts-grid">
                 <div class="filter">
                     <span class="badge">${podcastList.length}</span>
@@ -47,31 +47,31 @@ const PodcastList = {
                 </div>
             </div>
         `;        
-    },   
+	},   
 
-    _renderPodcastList(podcastList) {
-        const listElement = document.querySelector('.podcasts-list'),
-            badgeElement = document.querySelector('.badge');
+	_renderPodcastList(podcastList) {
+		const listElement = document.querySelector('.podcasts-list'),
+			badgeElement = document.querySelector('.badge');
 
-        render(this._getPodcastsHtml(podcastList.podcasts), listElement);
-        badgeElement.innerHTML = podcastList.podcasts.length;
-    },
+		render(this._getPodcastsHtml(podcastList.podcasts), listElement);
+		badgeElement.innerHTML = podcastList.podcasts.length;
+	},
 
-    _filterPodcasts(valuesFilter) {        
-        const filterList = this.podcastList.filter(podcast => {
-            const regex = new RegExp(valuesFilter, 'gi');
-            return podcast.name.match(regex) || podcast.author.match(regex);
-        });
+	_filterPodcasts(valuesFilter) {        
+		const filterList = this.podcastList.filter(podcast => {
+			const regex = new RegExp(valuesFilter, 'gi');
+			return podcast.name.match(regex) || podcast.author.match(regex);
+		});
 
-        this._renderPodcastList({podcasts: filterList}, valuesFilter);
-    },
+		this._renderPodcastList({podcasts: filterList}, valuesFilter);
+	},
 
-    initEvents() {
-        this.inputFilter = document.querySelector('[name="filter-value"]');
-        this.inputFilter.addEventListener("keyup", (event) => {
-            this._filterPodcasts(event.target.value);
-          });
-    }
-}
+	initEvents() {
+		this.inputFilter = document.querySelector('[name="filter-value"]');
+		this.inputFilter.addEventListener('keyup', (event) => {
+			this._filterPodcasts(event.target.value);
+		});
+	}
+};
 
 export default PodcastList;

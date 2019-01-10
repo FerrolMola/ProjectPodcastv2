@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/FerrolMola/ProjectPodcastv2/issues"
   },
-  "homepage": "https://github.com/FerrolMola/ProjectPodcastv2#readme"
+  "homepage": "https://github.com/FerrolMola/ProjectPodcastv2#readme",
+  "devDependencies": {
+    "eslint": "^5.12.0"
+  }
 }

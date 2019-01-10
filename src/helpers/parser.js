@@ -1,34 +1,51 @@
-export function parseEpisode(episode,numEpisode){
+export function parseEpisode(episode, numEpisode){
 	const episodeTitle = episode.querySelector('title').textContent,
 		id = numEpisode,
-		pubDate = new Date(episode.querySelector('pubDate').textContent).toLocaleDateString(),
-		durEl = episode.querySelector('duration'),
-		duration = durEl? durEl.textContent: '-',
-		mptEl = episode.querySelector('enclosure'),				
-		mp3 = mptEl.getAttribute('url') ? mptEl.getAttribute('url').textContent: '-',
+		pubDate = new Date(episode.querySelector('pubDate').textContent).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+		durEl = episode.querySelector('duration'),		
+		mp3 = episode.querySelector('enclosure').getAttribute('url'),	
 		descriptionEl = episode.querySelector('description'),
 		episodeDescription = descriptionEl ? descriptionEl.textContent: '-';
+	let duration = durEl ? durEl.textContent: '-';
 
-		return {
-			episodeTitle,
-			id,
-			pubDate,
-			duration,
-			mp3,
-			episodeDescription
-		}
+	if (!isNaN(duration)) {
+		duration = formatTime(duration);
+	}
+
+	return {
+		episodeTitle,
+		id,
+		pubDate,
+		duration,
+		mp3,
+		episodeDescription
+	};
 }
+
+function formatTime(n) {
+	const num = n,
+		hours = Math.floor(num / (60 * 60)),		
+		rhours = `${hours}`,
+		minutes = Math.floor((num % (60*60)) / 60),
+		rminutes = `${minutes}`,
+		seconds = minutes % 60,
+		rseconds = `${seconds}`,
+		strDuration = `${rminutes.padStart(2, '0')}:${rseconds.padStart(2, '0')}`;
+
+	return hours > 0 ?  `${rhours}:${strDuration}` : strDuration;
+}
+	
 
 export function parseEpisodes(podcastDocument) {	    
 	let numEpisode = 0,
-        episodes = [];
+		episodes = [];
         
 	Array.from(podcastDocument.querySelectorAll('rss channel item'))
 		.map(episode => {	
 			episodes.push(
 				parseEpisode(episode,numEpisode++)
-			)
-	})
+			);
+		});
 
 	return episodes;
 }
