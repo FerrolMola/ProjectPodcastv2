@@ -3,7 +3,8 @@ export function parseEpisode(episode, numEpisode){
 		id = numEpisode,
 		pubDate = new Date(episode.querySelector('pubDate').textContent).toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' }),
 		durEl = episode.querySelector('duration'),		
-		mp3 = episode.querySelector('enclosure').getAttribute('url'),	
+		enclosureEl = episode.querySelector('enclosure'),
+		mp3 = enclosureEl ? enclosureEl.getAttribute('url') : null,	
 		descriptionEl = episode.querySelector('description'),
 		episodeDescription = descriptionEl ? descriptionEl.textContent: '-';
 	let duration = durEl ? durEl.textContent: '-';
