@@ -1,4 +1,4 @@
-import Podcast from './podcast.js';
+import Podcast from './podcast-summary.js';
 import { getPodcast } from '../api/api.js';
 
 const PodcastDetail = {

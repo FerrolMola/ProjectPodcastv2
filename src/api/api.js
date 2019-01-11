@@ -1,4 +1,4 @@
-import { save, load } from '../plugin/cache.js';
+import { save, load } from '../plugins/cache.js';
 import { parseEpisodes, parsePodcast } from '../helpers/parser.js';
 
 const TOPPODCASTS_URL = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json',
