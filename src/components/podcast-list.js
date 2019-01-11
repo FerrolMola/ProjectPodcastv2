@@ -53,7 +53,7 @@ const PodcastList = {
                         placeholder="Filter podcasts..." value="">
                 </div>
                 <div class="podcasts-list">
-                    ${this._getPodcastsHtml(podcastList)}
+                    ${this._getPodcastsHtml(podcastList).join('')}
                 </div>
             </div>
         `;        
@@ -63,7 +63,7 @@ const PodcastList = {
 		const listElement = document.querySelector('.podcasts-list'),
 			badgeElement = document.querySelector('.badge');
 
-		render(this._getPodcastsHtml(podcastList.podcasts), listElement);
+		render(this._getPodcastsHtml(podcastList.podcasts).join(''), listElement);
 		badgeElement.innerHTML = podcastList.podcasts.length;
 	},
 

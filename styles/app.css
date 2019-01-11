@@ -70,7 +70,7 @@ a:hover {
 }
 
 .podcast-summary {
-	width: 225px;
+	width: 22%;
 	min-height: 350px;
 }
 
@@ -276,6 +276,11 @@ a:hover {
 }
 .episode-detail .player audio {
 	width: 100%;
+}
+
+.page-content {
+	max-width: 1500px;
+    margin: 0 auto;
 }
 
 /* START: Spinner (http://tobiasahlin.com/spinkit/) */
