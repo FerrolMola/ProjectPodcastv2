@@ -1,4 +1,4 @@
-import Router from './config/router.js';
+import Router from './plugins/router.js';
 import configRoutes from './config/config-routes.js';
 
 function hideSpinner() {
