@@ -6,7 +6,17 @@ const PodcastList = {
 	inputFilter: null,
 
 	init() {
-		return getAllPodcasts();
+		let self = this;
+		const promise = new Promise((resolve, reject) => {
+			getAllPodcasts()
+				.then(allPodcasts => {
+					self.podcastList = allPodcasts;
+					resolve(allPodcasts);
+				})
+				.catch(error => reject(error));
+		});
+
+		return promise;
 	},
 
 	_getPodcastsHtml(podcastList) {
