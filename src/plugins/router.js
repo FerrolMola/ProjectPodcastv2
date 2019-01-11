@@ -10,7 +10,7 @@ const Router = {
 				element = element.parentNode;
 			}
 
-			if (element) {
+			if (element && element.hostname === window.location.hostname) {
 				event.preventDefault();
 				window.history.pushState(null, '', element.pathname);
 				this.changeUrl(element.pathname, options);  
